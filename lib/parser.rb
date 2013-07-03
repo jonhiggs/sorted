@@ -1,59 +1,72 @@
 module Sorted
   class Parser
-    def initialize input
+    def initialize input, config={}
       @input = input.split("\n")
-      @id_counter = 0
+      @config = config
+      @config[:indentation] = indentation unless @config.has_key?(:indentation)
+      @data = create_structure
+      @data
     end
 
-    def input() @input end
+    def output
+      @data
+    end
 
-    def find_indentations
+    def indentation
+      return @config[:indentation] if @config.has_key?(:indentation)
+      @config[:indentation] = "#{indentation_value}" * indentation_count
+    end
+
+    private
+    def create_structure
+      data = []
+      @input.each do |line|
+        data.push({
+          :id => id,
+          :data => clean(line),
+          :depth => depth(line)
+        })
+      end
+      data
+    end
+
+    private
+    def depth line
+      return 0 if indentation.empty?
+      leading_whitespace = line.match(/^#{indentation}*/).to_s
+      leading_whitespace.scan(/#{indentation}/).size
+    end
+
+    private
+    def clean line
+      line.gsub(/^(#{indentation})*/, "")
+    end
+
+    private
+    def id
+      @config[:id_counter] = -1 unless @config.has_key?(:id_counter)
+      @config[:id_counter] += 1
+    end
+
+    private
+    def indentations
       whitespaces = []
-      input.each do |line|
+      @input.each do |line|
         v = line.match(/^\s*/).to_s
         whitespaces.push(v)
       end
       whitespaces.sort.uniq
     end
 
+    private
     def indentation_count
-      indents = find_indentations
-      return indents.first.size if indents.first.size == indents.last.size
-      indents[-1].size - indents[-2].size
+      return indentations.first.size if indentations.first.size == indentations.last.size
+      indentations[-1].size - indentations[-2].size
     end
 
+    private
     def indentation_value
-      find_indentations.last.empty? ? "" : find_indentations.last.match(/^./).to_s
-    end
-
-    def output
-      out = []
-      input.each do |line|
-        out.push({ :depth => depth(line), :data => clean(line) })
-      end
-      out.map!{|l| generate_id(l)}
-    end
-
-    def generate_id element
-      element[:id] = @id_counter
-      @id_counter = @id_counter + 1
-      element
-    end
-
-    def indent
-      "#{indentation_value}" * indentation_count
-    end
-
-    private
-    def depth line
-      return 0 if indent.empty?
-      leading_whitespace = line.match(/^#{indent}*/).to_s
-      leading_whitespace.scan(/#{indent}/).size
-    end
-
-    private
-    def clean line
-      line.gsub(/^(#{indent})*/, "")
+      indentations.last.empty? ? "" : indentations.last.match(/^./).to_s
     end
 
   end

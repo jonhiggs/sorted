@@ -1,23 +1,30 @@
 require 'parser'
 require 'test_helper'
 
-### COMPLETE FILES ############################################################
-context "#Parser::Indentation - Flat File" do
+### CAPABILITIES ##############################################################
+context "#Sorter::Parser - Config with default values" do
   setup do
-    @stdin = <<-EOF
-this is a
-very
-flat file
-    EOF
+    obj = Sorted::Parser.new("blah")
+  end
+  should("calculate indentation value") { topic.indentation == "" }
+end
 
+context "#Sorter::Parser - Config with set values" do
+  setup do
+    obj = Sorted::Parser.new("blah", { :indentation => "  "})
+  end
+
+  should("use the set indentation value") { topic.indentation == "  " }
+end
+
+#### COMPLETE FILES ############################################################
+context "#Sorted::Parser - With a flat file" do
+  setup do
+    @stdin = "this is a\nvery\nflat file"
     obj = Sorted::Parser.new(@stdin)
   end
 
-  asserts(:input).equals ["this is a", "very", "flat file"]
-  asserts(:find_indentations).equals [""]
-  asserts(:indentation_count).equals 0
-  asserts(:indentation_value).equals ""
-  asserts(:indent).equals ""
+  asserts(:indentation).equals ""
   asserts(:output).equals [
     {:id => 0, :depth => 0, :data => "this is a"},
     {:id => 1, :depth => 0, :data => "very"},
@@ -25,7 +32,7 @@ flat file
   ]
 end
 
-context "#Parser::Indentation - Complete File" do
+context "#Sorted::Parser - With a simple nest" do
   setup do
     @stdin = <<-EOF
 first level
@@ -39,10 +46,7 @@ another at top
     obj = Sorted::Parser.new(@stdin)
   end
 
-  asserts(:find_indentations).equals ["", "  ", "    ", "      "]
-  asserts(:indentation_count).equals 2
-  asserts(:indentation_value).equals " "
-  asserts(:indent).equals "  "
+  asserts(:indentation).equals "  "
 end
 
 ### EDGE CASES ################################################################
@@ -52,9 +56,7 @@ context "#Parser::Indentation - Tab Indented File" do
     obj = Sorted::Parser.new(@stdin)
   end
 
-  asserts(:indentation_count).equals 1
-  asserts(:indentation_value).equals "\t"
-  asserts(:indent).equals "\t"
+  asserts(:indentation).equals "\t"
   asserts(:output).equals [
     { :id => 0, :depth => 0, :data => "first level" },
     { :id => 1, :depth => 1, :data => "inside first level"}
@@ -69,5 +71,9 @@ context "#Parser::Indentation - File gets shallower" do
 
   asserts(:indentation_count).equals 1
   asserts(:indentation_value).equals "\t"
-  asserts(:output).equals [ { :depth => 2, :data => "really deep" }, { :depth => 1, :data => "deep"}, { :depth => 0, :data => "top" } ]
+  asserts(:output).equals [
+    { :id => 0, :depth => 2, :data => "really deep" },
+    { :id => 1, :depth => 1, :data => "deep"},
+    { :id => 2, :depth => 0, :data => "top" }
+  ]
 end
