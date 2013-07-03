@@ -2,6 +2,7 @@ module Sorted
   class Parser
     def initialize input
       @input = input.split("\n")
+      @id_counter = 0
     end
 
     def input() @input end
@@ -30,7 +31,13 @@ module Sorted
       input.each do |line|
         out.push({ :depth => depth(line), :data => clean(line) })
       end
-      out
+      out.map!{|l| generate_id(l)}
+    end
+
+    def generate_id element
+      element[:id] = @id_counter
+      @id_counter = @id_counter + 1
+      element
     end
 
     def indent
