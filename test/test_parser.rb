@@ -17,6 +17,14 @@ context "#Sorter::Parser - Config with set values" do
   should("use the set indentation value") { topic.indentation == "  " }
 end
 
+context "#Sorter::Parser - Hierachy search" do
+  setup do
+    obj = Sorted::Parser.new("blah\n\tin blah\n")
+  end
+
+  should("should be able to find children") { topic.children_of(0) == [1] }
+end
+
 #### COMPLETE FILES ############################################################
 context "#Sorted::Parser - With a flat file" do
   setup do

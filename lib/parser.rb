@@ -16,7 +16,29 @@ module Sorted
       @config[:indentation] = "#{indentation_value}" * indentation_count
     end
 
+    def children_of id
+      @children = []
+
+      @elements.each do |element|
+        if element[:id] == id
+          @depth_of_children = element[:depth] + 1
+          @found = true
+          next
+        end
+
+        if @found
+          return @children if element[:depth] != @depth_of_children
+          @children.push(element[:id])
+        else
+          next
+        end
+      end
+      @children
+    end
+
+    ##########################################################
     private
+
     def create_structure
       elements = []
       @input.each do |line|
@@ -29,25 +51,21 @@ module Sorted
       elements
     end
 
-    private
     def depth line
       return 0 if indentation.empty?
       leading_whitespace = line.match(/^#{indentation}*/).to_s
       leading_whitespace.scan(/#{indentation}/).size
     end
 
-    private
     def clean line
       line.gsub(/^(#{indentation})*/, "")
     end
 
-    private
     def id
       @config[:id_counter] = -1 unless @config.has_key?(:id_counter)
       @config[:id_counter] += 1
     end
 
-    private
     def indentations
       whitespaces = []
       @input.each do |line|
@@ -57,13 +75,11 @@ module Sorted
       whitespaces.sort.uniq
     end
 
-    private
     def indentation_count
       return indentations.first.size if indentations.first.size == indentations.last.size
       indentations[-1].size - indentations[-2].size
     end
 
-    private
     def indentation_value
       indentations.last.empty? ? "" : indentations.last.match(/^./).to_s
     end
