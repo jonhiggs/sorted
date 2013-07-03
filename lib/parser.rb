@@ -4,12 +4,11 @@ module Sorted
       @input = input.split("\n")
       @config = config
       @config[:indentation] = indentation unless @config.has_key?(:indentation)
-      @data = create_structure
-      @data
+      @elements = create_structure
     end
 
     def output
-      @data
+      @elements
     end
 
     def indentation
@@ -19,15 +18,15 @@ module Sorted
 
     private
     def create_structure
-      data = []
+      elements = []
       @input.each do |line|
-        data.push({
+        elements.push({
           :id => id,
           :data => clean(line),
           :depth => depth(line)
         })
       end
-      data
+      elements
     end
 
     private
