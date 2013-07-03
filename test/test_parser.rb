@@ -22,6 +22,7 @@ context "#Sorter::Parser - Hierachy search" do
     obj = Sorted::Parser.new("blah\n\tin blah\n")
   end
 
+  should("should find data from id") { topic.data_of(0) == "blah" }
   should("should be able to find children") { topic.children_of(0) == [1] }
 end
 

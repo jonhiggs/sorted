@@ -16,6 +16,12 @@ module Sorted
       @config[:indentation] = "#{indentation_value}" * indentation_count
     end
 
+    def data_of id
+      @elements.each do |element|
+        return element[:data] if element[:id] == id
+      end
+    end
+
     def children_of id
       @children = []
 
