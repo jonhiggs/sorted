@@ -17,6 +17,7 @@ flat file
   asserts(:find_indentations).equals [""]
   asserts(:indentation_count).equals 0
   asserts(:indentation_value).equals ""
+  asserts(:indent).equals ""
   asserts(:output).equals [ { :depth => 0, :data => "this is a"}, {:depth => 0, :data => "very"}, { :depth => 0, :data => "flat file"}]
 end
 
@@ -37,6 +38,7 @@ another at top
   asserts(:find_indentations).equals ["", "  ", "    ", "      "]
   asserts(:indentation_count).equals 2
   asserts(:indentation_value).equals " "
+  asserts(:indent).equals "  "
 end
 
 ### EDGE CASES ################################################################
@@ -48,6 +50,7 @@ context "#Parser::Indentation - Tab Indented File" do
 
   asserts(:indentation_count).equals 1
   asserts(:indentation_value).equals "\t"
+  asserts(:indent).equals "\t"
   asserts(:output).equals [ { :depth => 0, :data => "first level" }, { :depth => 1, :data => "inside first level"} ]
 end
 
@@ -59,4 +62,5 @@ context "#Parser::Indentation - File gets shallower" do
 
   asserts(:indentation_count).equals 1
   asserts(:indentation_value).equals "\t"
+  asserts(:output).equals [ { :depth => 2, :data => "really deep" }, { :depth => 1, :data => "deep"}, { :depth => 0, :data => "top" } ]
 end

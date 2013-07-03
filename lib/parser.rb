@@ -33,21 +33,20 @@ module Sorted
       out
     end
 
+    def indent
+      "#{indentation_value}" * indentation_count
+    end
+
     private
     def depth line
-      return 0 if indentation_value.empty?
-      line.scan(/^#{indentation_value}{#{indentation_count}}/).size
+      return 0 if indent.empty?
+      leading_whitespace = line.match(/^#{indent}*/).to_s
+      leading_whitespace.scan(/#{indent}/).size
     end
 
     private
     def clean line
-      return line if indentation_value.empty?
-      while line.scan(/^#{indentation_value}{#{indentation_count}}/).size > 0
-        line.gsub!(/^#{indentation_value}{#{indentation_count}}/, "")
-        puts line
-        break if indentation_value.empty?
-      end
-      line
+      line.gsub(/^(#{indent})*/, "")
     end
 
   end
