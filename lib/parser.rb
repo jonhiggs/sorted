@@ -23,6 +23,7 @@ module Sorted
         :data => clean(line),
         :depth => depth(line)
       })
+      @elements.last[:parent] = parent_of_last
     end
 
     def indentation
@@ -31,7 +32,18 @@ module Sorted
     end
 
     def children_of id
-      id < size ? @elements[id][:children] : nil
+      counter = 0
+      children = []
+      @elements.each do |e|
+        puts e.inspect
+        children.push(counter) if e[:parent] == id
+        counter += 1
+      end
+      children
+    end
+
+    def parent_of id
+      id < size ? @elements[id][:parent] : nil
     end
 
     def data_of id
@@ -51,25 +63,17 @@ module Sorted
       line.gsub(/^(#{indentation})*/, "")
     end
 
-    def children elements,this_id
-      children = []
+    def parent_of_last
+      depth_of_last = @elements.last[:depth]
+      return nil if depth_of_last == 0
 
-      elements.each do |k,element|
-        if k == this_id
-          @depth_of_children = element[:depth] + 1
-          #puts "setting depth to: #{@depth_of_children.inspect}"
-          @found = true
-          next
-        end
-
-        if @found
-          return children if element[:depth] != @depth_of_children
-          children.push(k)
-        else
-          next
-        end
+      @elements.reverse.each do |e|
+        return e[:depth] if e[:depth] < depth_of_last
       end
-      children
+    end
+
+
+    def children this_id
     end
 
     def indentations
