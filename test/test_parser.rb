@@ -32,4 +32,16 @@ context "#Sorted::Parser" do
     asserts("have a parent set for second") { topic.parent_of(1) == 0 }
     asserts("indentation") { topic.indentation == "\t" }
   end
+
+  context "with valid json" do
+    valid_json = "{\n  'Version' : '1',\n  'Description' : 'Something',\n  'Parameters' : {\n    'InstanceType' : {\n      'Description' : 'tests'\n    }\n  }\n}\n"
+    hookup { topic.push(valid_json) }
+
+    asserts("that indentation is two spaces") { topic.indentation == "  " }
+    asserts("that first line is valid") { topic.data_of(0) == "{" }
+    asserts("that second line is valid") { topic.data_of(1) == "'Version' : '1'," }
+    asserts("that second line is child of first") { topic.children_of(0).include?(1) }
+    asserts("that third line is child of first") { topic.children_of(0).include?(2) }
+    denies("that firth line is child of first") { topic.children_of(0).include?(3) }
+  end
 end
