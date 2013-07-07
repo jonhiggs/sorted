@@ -67,12 +67,12 @@ module Sorted
       return nil if depth_of_last == 0
 
       @elements.reverse.each do |e|
-        return e[:depth] if e[:depth] < depth_of_last
+        if e[:depth] < depth_of_last
+          @answer = e
+          break
+        end
       end
-    end
-
-
-    def children this_id
+      @elements.index(@answer)
     end
 
     def indentations
