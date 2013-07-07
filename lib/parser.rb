@@ -1,14 +1,28 @@
 module Sorted
   class Parser
     def initialize input, config={}
+      @elements = []
       @input = input.split("\n")
       @config = config
       @config[:indentation] = indentation unless @config.has_key?(:indentation)
-      @elements = create_structure
+      @input.each do |line|
+        push(line)
+      end
     end
 
-    def output
+    def to_a
       @elements
+    end
+
+    def size
+      @elements.size
+    end
+
+    def push line
+      @elements.push({
+        :data => clean(line),
+        :depth => depth(line)
+      })
     end
 
     def indentation
@@ -16,46 +30,16 @@ module Sorted
       @config[:indentation] = "#{indentation_value}" * indentation_count
     end
 
-    def data_of id
-      @elements.each do |element|
-        return element[:data] if element[:id] == id
-      end
+    def children_of id
+      id < size ? @elements[id][:children] : nil
     end
 
-    def children_of id
-      @children = []
-
-      @elements.each do |element|
-        if element[:id] == id
-          @depth_of_children = element[:depth] + 1
-          @found = true
-          next
-        end
-
-        if @found
-          return @children if element[:depth] != @depth_of_children
-          @children.push(element[:id])
-        else
-          next
-        end
-      end
-      @children
+    def data_of id
+      id < size ? @elements[id][:data] : nil
     end
 
     ##########################################################
     private
-
-    def create_structure
-      elements = []
-      @input.each do |line|
-        elements.push({
-          :id => id,
-          :data => clean(line),
-          :depth => depth(line)
-        })
-      end
-      elements
-    end
 
     def depth line
       return 0 if indentation.empty?
@@ -67,9 +51,25 @@ module Sorted
       line.gsub(/^(#{indentation})*/, "")
     end
 
-    def id
-      @config[:id_counter] = -1 unless @config.has_key?(:id_counter)
-      @config[:id_counter] += 1
+    def children elements,this_id
+      children = []
+
+      elements.each do |k,element|
+        if k == this_id
+          @depth_of_children = element[:depth] + 1
+          #puts "setting depth to: #{@depth_of_children.inspect}"
+          @found = true
+          next
+        end
+
+        if @found
+          return children if element[:depth] != @depth_of_children
+          children.push(k)
+        else
+          next
+        end
+      end
+      children
     end
 
     def indentations
@@ -82,11 +82,13 @@ module Sorted
     end
 
     def indentation_count
+      return 0 if indentations.empty?
       return indentations.first.size if indentations.first.size == indentations.last.size
       indentations[-1].size - indentations[-2].size
     end
 
     def indentation_value
+      return "" if indentations.empty?
       indentations.last.empty? ? "" : indentations.last.match(/^./).to_s
     end
 
