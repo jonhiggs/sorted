@@ -32,6 +32,8 @@ context "#Sorted::Parser" do
     asserts("that line zero is parent of line one") { topic.parent_of(1) == 0 }
     asserts("that line zero is a parent") { topic.is_parent?(0) }
     denies("that line one is a parent") { topic.is_parent?(1) }
+    denies("that line zero is a child") { topic.is_child?(0) }
+    asserts("that line one is a child") { topic.is_child?(1) }
   end
 
   context "with valid json" do

@@ -53,6 +53,10 @@ module Sorted
       !children_of(id).empty?
     end
 
+    def is_child? id
+      !parent_of(id).nil?
+    end
+
     ##########################################################
     private
 
