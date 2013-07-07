@@ -1,13 +1,11 @@
 module Sorted
   class Parser
     def initialize input, config={}
+      @input = []
       @elements = []
-      @input = input.split("\n")
       @config = config
       @config[:indentation] = indentation unless @config.has_key?(:indentation)
-      @input.each do |line|
-        push(line)
-      end
+      push(input)
     end
 
     def to_a
@@ -18,12 +16,15 @@ module Sorted
       @elements.size
     end
 
-    def push line
-      @elements.push({
-        :data => clean(line),
-        :depth => depth(line)
-      })
-      @elements.last[:parent] = parent_of_last
+    def push input
+      input.split("\n").each do |line|
+        @input.push(line)
+        @elements.push({
+          :data => clean(line),
+          :depth => depth(line)
+        })
+        @elements.last[:parent] = parent_of_last
+      end
     end
 
     def indentation
