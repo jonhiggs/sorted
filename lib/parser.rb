@@ -45,8 +45,25 @@ module Sorted
       id < size ? @elements[id][:parent] : nil
     end
 
+    def siblings_of id
+      if depth_of(id) == 0
+        answer = []
+        results = @elements.select{|e| e[:depth] == 0}
+        results.each do |a|
+          answer.push(@elements.index(a))
+        end
+        answer
+      else
+        children_of(parent_of(id))
+      end
+    end
+
     def data_of id
       id < size ? @elements[id][:data] : nil
+    end
+
+    def depth_of id
+      id < size ? @elements[id][:depth] : nil
     end
 
     def is_parent? id

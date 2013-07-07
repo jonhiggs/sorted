@@ -14,12 +14,14 @@ context "#Sorted::Parser" do
   end
 
   context "with flat data" do
-    hookup { topic.push("first line") }
-    asserts("have 1 element") { topic.size == 1 }
-    asserts("data is not empty") { topic.data_of(0) == "first line" }
-    asserts("parent is nil") { topic.parent_of(0).nil? }
-    asserts("children is empty") { topic.children_of(0).empty? }
-    asserts("indentation") { topic.indentation == "" }
+    hookup { topic.push("first line\nsecond_line") }
+    asserts("that indentation is empty") { topic.indentation.empty? }
+    asserts("that topic has two elements") { topic.size == 2 }
+    asserts("that data is not empty") { topic.data_of(0) == "first line" }
+    asserts("that parent is nil") { topic.parent_of(0).nil? }
+    asserts("that children is empty") { topic.children_of(0).empty? }
+    asserts("that zero is sibling of one") { topic.siblings_of(1).include?(0) }
+    asserts("that one is sibling of zero") { topic.siblings_of(0).include?(1) }
   end
 
   context "with indented data" do
@@ -49,5 +51,7 @@ context "#Sorted::Parser" do
     asserts("that line zero has no parent" ) { topic.parent_of(0).nil? }
     asserts("that line one has parent of zero" ) { topic.parent_of(1) == 0 }
     asserts("that line four has parent of three" ) { topic.parent_of(4) == 3 }
+    asserts("that line four has sibling of four and six" ) { topic.siblings_of(4) == [4,6] }
+    asserts("that line zero has sibling of zero and eight" ) { topic.siblings_of(0) == [0,8] }
   end
 end
