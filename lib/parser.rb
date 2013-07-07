@@ -49,6 +49,10 @@ module Sorted
       id < size ? @elements[id][:data] : nil
     end
 
+    def is_parent? id
+      !children_of(id).empty?
+    end
+
     ##########################################################
     private
 
