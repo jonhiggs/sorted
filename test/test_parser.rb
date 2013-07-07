@@ -38,10 +38,12 @@ context "#Sorted::Parser" do
     hookup { topic.push(valid_json) }
 
     asserts("that indentation is two spaces") { topic.indentation == "  " }
-    asserts("that first line is valid") { topic.data_of(0) == "{" }
-    asserts("that second line is valid") { topic.data_of(1) == "'Version' : '1'," }
-    asserts("that second line is child of first") { topic.children_of(0).include?(1) }
-    asserts("that third line is child of first") { topic.children_of(0).include?(2) }
-    denies("that firth line is child of first") { topic.children_of(0).include?(3) }
+    asserts("that line zero is valid") { topic.data_of(0) == "{" }
+    asserts("that line one is valid") { topic.data_of(1) == "'Version' : '1'," }
+    asserts("that line one is child of line zero") { topic.children_of(0).include?(1) }
+    denies("that line four is child of line zero") { topic.children_of(0).include?(3) }
+    asserts("that line zero has no parent" ) { topic.parent_of(0).nil? }
+    asserts("that line one has parent of zero" ) { topic.parent_of(1) == 0 }
+    asserts("that line four has parent of three" ) { topic.parent_of(4) == 3 }
   end
 end
