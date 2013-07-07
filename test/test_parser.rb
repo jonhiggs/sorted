@@ -24,9 +24,12 @@ context "#Sorted::Parser" do
 
   context "with indented data" do
     hookup { topic.push("line one\n\tline two\n") }
+    asserts("use a tab for indentation") { topic.indentation == "\t" }
     asserts("have 2 elements") { topic.size == 2 }
-    asserts("data is not empty") { topic.data_of(0) == "first line" }
-    asserts("children is empty") { topic.children_of(0) == 0 }
+    asserts("have correct data for first line") { topic.data_of(0) == "line one" }
+    asserts("have correct data for second line") { topic.data_of(1) == "line two" }
+    asserts("have a child set for first") { topic.children_of(0) == [1] }
+    asserts("have a parent set for second") { topic.parent_of(1) == 0 }
     asserts("indentation") { topic.indentation == "\t" }
   end
 end

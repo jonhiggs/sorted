@@ -28,15 +28,13 @@ module Sorted
     end
 
     def indentation
-      return @config[:indentation] if @config.has_key?(:indentation)
-      @config[:indentation] = "#{indentation_value}" * indentation_count
+      "#{indentation_value}" * indentation_count
     end
 
     def children_of id
       counter = 0
       children = []
       @elements.each do |e|
-        puts e.inspect
         children.push(counter) if e[:parent] == id
         counter += 1
       end
