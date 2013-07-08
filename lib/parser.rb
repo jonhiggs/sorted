@@ -74,6 +74,17 @@ module Sorted
       !parent_of(id).nil?
     end
 
+    def block_of id
+      indexes = siblings_of(id).zip(children_of(id)).flatten.compact
+      results = []
+      @elements.each_with_index do |element,index|
+        results.push(element) if indexes.include?(index)
+      end
+      puts results.inspect
+      results
+    end
+
+
     ##########################################################
     private
 

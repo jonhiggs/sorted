@@ -22,6 +22,7 @@ context "#Sorted::Parser" do
     asserts("that children is empty") { topic.children_of(0).empty? }
     asserts("that zero is sibling of one") { topic.siblings_of(1).include?(0) }
     asserts("that one is sibling of zero") { topic.siblings_of(0).include?(1) }
+    asserts("that block of zero has two elements") { topic.block_of(0).size == 2 }
   end
 
   context "with indented data" do
