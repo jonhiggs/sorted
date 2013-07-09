@@ -59,6 +59,7 @@ context "#Sorted::Parser" do
     asserts("that line four has parent of three" ) { topic.parent_of(4) == 3 }
     asserts("that line four has sibling of four and six" ) { topic.siblings_of(4) == [4,6] }
     asserts("that line zero has sibling of zero and eight" ) { topic.siblings_of(0) == [0,8] }
+    asserts("that line four has child of five") { topic.children_of(4) == [5] }
     asserts("that block of three has seven elements") { topic.block_of(3).size == 7 }
   end
 end
