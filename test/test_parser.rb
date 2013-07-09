@@ -23,6 +23,8 @@ context "#Sorted::Parser" do
     asserts("that zero is sibling of one") { topic.siblings_of(1).include?(0) }
     asserts("that one is sibling of zero") { topic.siblings_of(0).include?(1) }
     asserts("that block of zero has two elements") { topic.block_of(0).size == 2 }
+    asserts("that block has correct line zero") { topic.block_of(0)[0][:data] == "first line" }
+    asserts("that block has correct line one") { topic.block_of(0)[1][:data] == "second_line" }
   end
 
   context "with indented data" do
@@ -37,6 +39,9 @@ context "#Sorted::Parser" do
     denies("that line one is a parent") { topic.is_parent?(1) }
     denies("that line zero is a child") { topic.is_child?(0) }
     asserts("that line one is a child") { topic.is_child?(1) }
+    asserts("that block of zero has two elements") { topic.block_of(0).size == 2 }
+    asserts("that block has correct line zero") { topic.block_of(0)[0][:depth] == 0 }
+    asserts("that block has correct line one") { topic.block_of(0)[1][:depth] == 1 }
   end
 
   context "with valid json" do
@@ -54,5 +59,6 @@ context "#Sorted::Parser" do
     asserts("that line four has parent of three" ) { topic.parent_of(4) == 3 }
     asserts("that line four has sibling of four and six" ) { topic.siblings_of(4) == [4,6] }
     asserts("that line zero has sibling of zero and eight" ) { topic.siblings_of(0) == [0,8] }
+    asserts("that block of three has seven elements") { topic.block_of(3).size == 7 }
   end
 end
