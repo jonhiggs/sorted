@@ -70,6 +70,7 @@ context "#Sorted::Parser" do
     asserts ("that line three has no siblings") { topic.siblings_of(3).empty? }
     asserts ("that line three has four as child") { topic.children_of(3) == [4] }
     asserts ("that line zero has no siblings") { topic.siblings_of(0).empty? }
+    asserts ("that line four has four parents") { topic.parents_of(4).size == 4 }
   end
 
 end

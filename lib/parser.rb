@@ -60,6 +60,17 @@ module Sorted
       id < size ? @elements[id][:parent] : nil
     end
 
+    def parents_of id
+      parents = []
+
+      parent = parent_of(id)
+      while !parent.nil?
+        parents.push(parent)
+        parent = parent_of(parent)
+      end
+      parents.sort
+    end
+
     def siblings_of id
       if depth_of(id) == 0
         answer = []
