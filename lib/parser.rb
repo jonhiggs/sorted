@@ -32,22 +32,13 @@ module Sorted
     end
 
     def children_of id
-      parents = parents_of(id)
-      elements = @elements.map do |e|
+      @elements.map {|e|
         i = @elements.index(e)
         next unless parents_of(i).include?(id)
-        next if parents.include?(e[:parent])
+        next if parents_of(id).include?(e[:parent])
         next if e[:parent].nil?
-        e
-      end
-      elements.compact!
-
-      results = []
-      elements.each do |e|
-        results.push(@elements.index(e))
-      end
-
-      results
+        i
+      }.compact || []
     end
 
     def parent_of id
