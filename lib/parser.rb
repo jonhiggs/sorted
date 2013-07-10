@@ -92,12 +92,8 @@ module Sorted
     end
 
     def block_of id
-      elements = [id]
-      elements.push(children_of(id))
-      elements.push(siblings_of(id))
-      elements.flatten.sort.map{|index|
-        @elements[index]
-      }
+      elements = [id, children_of(id), siblings_of(id)].flatten.sort
+      elements.map{|index| @elements[index] }
     end
 
     ##########################################################
