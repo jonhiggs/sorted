@@ -71,7 +71,6 @@ module Sorted
           answer.push(@elements.index(a))
         end
         answer.delete(id)
-        puts answer.inspect
         answer
       else
         r = @elements.map{|e| @elements.index(e) if e[:parent] == parent_of(id)}.compact
