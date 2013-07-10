@@ -92,13 +92,12 @@ module Sorted
     end
 
     def block_of id
-      indexes = siblings_of(id).zip(children_of(id)).flatten.compact
-      indexes.push(id).sort!.uniq!
-      results = []
-      @elements.each_with_index do |element,index|
-        results.push(element) if indexes.include?(index)
-      end
-      results
+      elements = [id]
+      elements.push(children_of(id))
+      elements.push(siblings_of(id))
+      elements.flatten.sort.map{|index|
+        @elements[index]
+      }
     end
 
     ##########################################################
