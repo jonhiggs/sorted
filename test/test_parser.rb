@@ -65,12 +65,33 @@ context "#Sorted::Parser" do
 
   context "a deep nest" do
     hookup { topic.push("line zero\n\tline one\n\t\tline two\n\t\t\tline three\n\t\t\t\tline four") }
-    asserts ("that line four has no siblings") { topic.siblings_of(4).empty? }
-    asserts ("that line four has no children") { topic.children_of(4).empty? }
+    asserts ("that line zero has no siblings") { topic.siblings_of(0).empty? }
+    asserts ("that line zero has no parents") { topic.parents_of(0).empty? }
+
     asserts ("that line three has no siblings") { topic.siblings_of(3).empty? }
     asserts ("that line three has four as child") { topic.children_of(3) == [4] }
-    asserts ("that line zero has no siblings") { topic.siblings_of(0).empty? }
+    asserts ("that line three has three parents") { topic.parents_of(3).size == 3 }
+
+    asserts ("that line four has no siblings") { topic.siblings_of(4).empty? }
+    asserts ("that line four has no children") { topic.children_of(4).empty? }
     asserts ("that line four has four parents") { topic.parents_of(4).size == 4 }
+  end
+
+  context "two deep nests" do
+    hookup {
+      topic.push("line zero\n\tline one\n\t\tline two\n\t\t\tline three\n\t\t\t\tline four")
+      topic.push("line five\n\tline six\n\t\tline seven\n\t\t\tline eight\n\t\t\t\tline nine")
+    }
+    asserts ("that line zero has one sibling") { topic.siblings_of(0).size == 1 }
+    asserts ("that line zero has no parents") { topic.parents_of(0).empty? }
+
+    asserts ("that line four has no siblings") { topic.siblings_of(4).empty? }
+    asserts ("that line four has no children") { topic.children_of(4).empty? }
+    asserts ("that line four has four parents") { topic.parents_of(4).size == 4 }
+
+    asserts ("that line nine has no siblings") { topic.siblings_of(9).empty? }
+    asserts ("that line nine has no children") { topic.children_of(9).empty? }
+    asserts ("that line nine has four parents") { topic.parents_of(9).size == 4 }
   end
 
 end

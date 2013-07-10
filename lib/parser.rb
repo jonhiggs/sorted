@@ -34,6 +34,8 @@ module Sorted
     def children_of id
       parents = parents_of(id)
       elements = @elements.map do |e|
+        i = @elements.index(e)
+        next unless parents_of(i).include?(id)
         next if parents.include?(e[:parent])
         next if e[:parent].nil?
         e
