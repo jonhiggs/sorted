@@ -52,7 +52,7 @@ context "#Sorted::Parser" do
     asserts("that line zero is valid") { topic.data_of(0) == "{" }
     asserts("that line one is valid") { topic.data_of(1) == "'Version' : '1'," }
     asserts("that line one is child of line zero") { topic.children_of(0).include?(1) }
-    denies("that line four is child of line zero") { topic.children_of(0).include?(4) }
+    asserts("that line four is child of line zero") { topic.children_of(0).include?(4) }
     asserts("that line four is child of line three") { topic.children_of(3).include?(4) }
     asserts("that line zero has no parent" ) { topic.parent_of(0).nil? }
     asserts("that line one has parent of zero" ) { topic.parent_of(1) == 0 }
