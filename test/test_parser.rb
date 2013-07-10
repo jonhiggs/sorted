@@ -57,9 +57,19 @@ context "#Sorted::Parser" do
     asserts("that line zero has no parent" ) { topic.parent_of(0).nil? }
     asserts("that line one has parent of zero" ) { topic.parent_of(1) == 0 }
     asserts("that line four has parent of three" ) { topic.parent_of(4) == 3 }
-    asserts("that line four has sibling of four and six" ) { topic.siblings_of(4) == [4,6] }
-    asserts("that line zero has sibling of zero and eight" ) { topic.siblings_of(0) == [0,8] }
+    asserts("that line four has sibling of six" ) { topic.siblings_of(4) == [6] }
+    asserts("that line zero has sibling of eight" ) { topic.siblings_of(0) == [8] }
     asserts("that line four has child of five") { topic.children_of(4) == [5] }
     asserts("that block of three has seven elements") { topic.block_of(3).size == 7 }
   end
+
+  context "a deep nest" do
+    hookup { topic.push("line zero\n\tline one\n\t\tline two\n\t\t\tline three\n\t\t\t\tline four") }
+    asserts ("that line four has no siblings") { topic.siblings_of(4).empty? }
+    asserts ("that line four has no children") { topic.children_of(4).empty? }
+    asserts ("that line three has no siblings") { topic.siblings_of(3).empty? }
+    asserts ("that line three has four as child") { topic.children_of(3) == [4] }
+    asserts ("that line zero has no siblings") { topic.siblings_of(0).empty? }
+  end
+
 end
