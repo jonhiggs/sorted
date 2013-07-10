@@ -31,29 +31,21 @@ module Sorted
       "#{indentation_value}" * indentation_count
     end
 
-    def children_of id,recursed=false
-      # TODO: this could be a good way to find children
-      # @elements.map{|e| e if e[:parent] == id }.compact
+    def children_of id
+      parents = parents_of(id)
+      elements = @elements.map do |e|
+        next if parents.include?(e[:parent])
+        next if e[:parent].nil?
+        e
+      end
+      elements.compact!
 
-      counter = 0
-      children = []
-      parents = []
-      @elements.each do |e|
-        children.push(counter) if e[:parent] == id
-        parents.push(counter) if is_parent?(counter)
-        counter += 1
+      results = []
+      elements.each do |e|
+        results.push(@elements.index(e))
       end
 
-      # remove parents that we already have children for
-      children.each do |child|
-        parents.delete(parent_of(child))
-      end
-
-      while !parents.empty? && !recursed
-        children.push(children_of(parents.first,true))
-        parents.delete(parents.first)
-      end
-      children.flatten.sort.uniq
+      results
     end
 
     def parent_of id
