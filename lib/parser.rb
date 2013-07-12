@@ -47,7 +47,6 @@ module Sorted
 
     def parents_of id
       parents = []
-
       parent = parent_of(id)
       while !parent.nil?
         parents.push(parent)
@@ -81,9 +80,7 @@ module Sorted
     end
 
     def is_parent? id
-      @elements.each do |e|
-        return true if e[:parent] == id
-      end
+      @elements.each {|e| return true if e[:parent] == id }
       false
     end
 
