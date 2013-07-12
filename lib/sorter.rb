@@ -13,11 +13,11 @@ module Sorted
       @input
     end
 
-    def numeric
+    def dictionary
       @input
     end
 
-    def dictionary
+    def numeric
       @input
     end
 
