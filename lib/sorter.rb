@@ -5,6 +5,10 @@ module Sorted
       @input = ::Sorted::Parser.new(input).to_a if input.is_a?(String)
     end
 
+    def size
+      @input.size
+    end
+
     def to_a
       @input
     end

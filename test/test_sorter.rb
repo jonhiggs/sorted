@@ -10,7 +10,7 @@ context "#Sorted::Sorter" do
         obj = Sorted::Sorter.new("first_line")
       end
 
-      asserts("that it has one element") { topic.to_a.size == 1 }
+      asserts("that it has one element") { topic.size == 1 }
     end
 
     context "with two lines" do
@@ -18,7 +18,7 @@ context "#Sorted::Sorter" do
         obj = Sorted::Sorter.new("first_line\nsecond_line\n")
       end
 
-      asserts("that it has two elements") { topic.to_a.size == 2 }
+      asserts("that it has two elements") { topic.size == 2 }
     end
   end
 
