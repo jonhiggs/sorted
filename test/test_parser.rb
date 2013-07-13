@@ -25,6 +25,7 @@ context "#Sorted::Parser" do
     asserts("that block of zero has two elements") { topic.block_of(0).size == 2 }
     asserts("that block has correct line zero") { topic.block_of(0)[0][:data] == "first line" }
     asserts("that block has correct line one") { topic.block_of(0)[1][:data] == "second_line" }
+    asserts("that to_s returns correct string") { topic.to_s == "first line\nsecond_line\n" }
   end
 
   context "with indented data" do
@@ -42,6 +43,7 @@ context "#Sorted::Parser" do
     asserts("that block of zero has two elements") { topic.block_of(0).size == 2 }
     asserts("that block has correct line zero") { topic.block_of(0)[0][:depth] == 0 }
     asserts("that block has correct line one") { topic.block_of(0)[1][:depth] == 1 }
+    asserts("that to_s returns correct string") { topic.to_s == "line one\n\tline two\n" }
   end
 
   context "with valid json" do
@@ -82,7 +84,10 @@ context "#Sorted::Parser" do
       topic.push("line zero\n\tline one\n\t\tline two\n\t\t\tline three\n\t\t\t\tline four")
       topic.push("line five\n\tline six\n\t\tline seven\n\t\t\tline eight\n\t\t\t\tline nine")
     }
+    asserts ("that we have ten elements") { topic.size == 10 }
+    asserts ("that block of line zero has six elements") { topic.block_of(0).size == 6 }
     asserts ("that line zero has one sibling") { topic.siblings_of(0).size == 1 }
+    asserts ("that line zero has four children") { topic.children_of(0).size == 4}
     asserts ("that line zero has no parents") { topic.parents_of(0).empty? }
 
     asserts ("that line four has no siblings") { topic.siblings_of(4).empty? }

@@ -1,19 +1,24 @@
 module Sorted
+  module Formatter
+    def to_s
+      puts "my to_s"
+      puts @elements.to_a.map{|e| (indentation * e[:depth]) + e[:data]}.join("\n").inspect
+      @elements.to_a.map{|e| (indentation * e[:depth]) + e[:data]}.join("\n") + "\n"
+    end
+
+    def size
+      @elements.size
+    end
+  end
+
   class Parser
+    include Formatter
     def initialize input, config={}
       @input = []
       @elements = []
       @config = config
       @config[:indentation] = indentation unless @config.has_key?(:indentation)
       push(input)
-    end
-
-    def to_a
-      @elements
-    end
-
-    def size
-      @elements.size
     end
 
     def push input
