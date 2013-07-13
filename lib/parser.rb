@@ -17,22 +17,23 @@ module Sorted
     require 'indentation'
     include Formatter
     def initialize input, config={}
-      @input = []
+      @input = input
       @elements = []
       @config = config
       push(input)
     end
 
     def push input
+      @input += input
+      @indentation = Sorted::Indentation.new(@input)
+
       input.split("\n").each do |line|
-        @input.push(line)
         @elements.push({
           :data => clean(line),
           :depth => depth(line)
         })
         @elements.last[:parent] = parent_of_last
       end
-      @indentation = Sorted::Indentation.new(@input)
     end
 
     def children_of id
@@ -99,7 +100,6 @@ module Sorted
 
     ##########################################################
     private
-
     def depth line
       return 0 if @indentation.to_s.empty?
       leading_whitespace = line.match(/^#{@indentation.to_s}*/).to_s
