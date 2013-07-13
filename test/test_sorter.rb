@@ -14,18 +14,3 @@ context "#Sorted::Sorter::Dictionary" do
     asserts("size is 1") { topic.size == 1 }
   end
 end
-
-#"one\ntwo\n100\n1\n2\n"
-#"one\ntwo\n1\n2\n100\n" # numeric
-#"1\n100\n2\none\ntwo\n" # dictionary
-
-#      end
-#
-#      asserts("that it has five elements") { topic.size == 5 }
-#      asserts("that it has five elements") { topic.to_s == "something" }
-#      asserts("that it has five elements") { topic.to_s == "something" }
-#      asserts("that it can sort by dictionary") { topic.dictionary == [{:data=>"y", :depth=>0, :parent=>nil}, {:data=>"z", :depth=>0, :parent=>nil}] }
-#    end
-#  end
-#
-#end

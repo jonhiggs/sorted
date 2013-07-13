@@ -1,5 +1,6 @@
 class Sorter
   class Dictionary
+    require 'indentation'
     include Sorted::Formatter
 
     def initialize input, config={}
