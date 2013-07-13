@@ -4,10 +4,9 @@ class Sorter
     include Sorted::Formatter
 
     def initialize input, config={}
-      @input = input
+      @indentation = Sorted::Indentation.new(input)
       @elements = Sorted::Parser.new(input)
-      sort
-      puts "elements are #{@elements.to_a.inspect}"
+      @elements = sort
     end
 
     def sort
