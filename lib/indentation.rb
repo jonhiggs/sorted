@@ -1,7 +1,7 @@
 module Sorted
   class Indentation
     def initialize input
-      @input = input
+      @input = input.split("\n")
     end
 
     def to_s
