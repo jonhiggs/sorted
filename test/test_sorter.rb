@@ -5,31 +5,36 @@ require 'test_helper'
 context "#Sorted::Sorter::Dictionary" do
   context "has basic functionality" do
     setup do
-      obj = Sorter::Dictionary.new("y\n")
+      data = "bill\njoe\nsteven\n  tom\n  craig\n    kate\n    jo\nmatt\njon\n  jill\n  jane\nsarah\n"
+      obj = Sorter::Dictionary.new(data)
     end
 
-    asserts("to_a returns an array of hashes") { topic.to_a == [{:data=>"y", :depth=>0, :parent=>nil}] }
-    asserts("to_s returns data in a string") { topic.to_s == "y\n" }
-    asserts("size is correct") { topic.size == 1 }
-  end
+    # bill
+    # joe
+    # steven
+    #   tom
+    #   craig
+    #     kate
+    #     jo
+    # matt
+    # jon
+    #   jill
+    #   jane
+    # sarah
 
-  context "can sort flat data" do
-    setup do
-      obj = Sorter::Dictionary.new("z\ny\n")
-    end
-
-    asserts("to_a returns an array of hashes") { topic.to_a == [{:data=>"y", :depth=>0, :parent=>nil}, {:data=>"z", :depth=>0, :parent=>nil}] }
-    asserts("to_s returns data in a string") { topic.to_s == "y\nz\n" }
-    asserts("size is correct") { topic.size == 2 }
-  end
-
-  context "can indented data" do
-    setup do
-      obj = Sorter::Dictionary.new("z\n\ty\n")
-    end
-
-    asserts("to_a returns an array of hashes") { topic.to_a == [{:data=>"z", :depth=>0, :parent=>nil}, {:data=>"y", :depth=>0, :parent=>nil}] }
-    asserts("to_s returns data in a string") { topic.to_s == "z\n\ty\n" }
-    asserts("size is correct") { topic.size == 2 }
+    asserts(:get_next).equals 0
+    asserts(:sort_siblings_of_next).equals [0, 1, 8, 7, 11, 2]
+    asserts(:insert_next_into_ordered_list).equals [0, 1, 8, 7, 11, 2]
+    asserts(:get_next).equals 3
+    asserts(:sort_siblings_of_next).equals [4, 3]
+    asserts(:insert_next_into_ordered_list).equals [0, 1, 8, 7, 11, 2, 4, 3]
+    asserts(:get_next).equals 5
+    asserts(:sort_siblings_of_next).equals [ 6, 5 ]
+    asserts(:insert_next_into_ordered_list).equals [0, 1, 8, 7, 11, 2, 4, 6, 5, 3]
+    asserts(:get_next).equals 9
+    asserts(:sort_siblings_of_next).equals [ 10, 9 ]
+    asserts(:insert_next_into_ordered_list).equals [0, 1, 8, 10, 9, 7, 11, 2, 4, 6, 5, 3]
+    asserts(:to_a).equals [{:data=>"bill", :depth=>0, :parent=>nil, :original_position=>0}, {:data=>"joe", :depth=>0, :parent=>nil, :original_position=>1}, {:data=>"jon", :depth=>0, :parent=>nil, :original_position=>8}, {:data=>"jane", :depth=>1, :parent=>8, :original_position=>10}, {:data=>"jill", :depth=>1, :parent=>8, :original_position=>9}, {:data=>"matt", :depth=>0, :parent=>nil, :original_position=>7}, {:data=>"sarah", :depth=>0, :parent=>nil, :original_position=>11}, {:data=>"steven", :depth=>0, :parent=>nil, :original_position=>2}, {:data=>"craig", :depth=>1, :parent=>2, :original_position=>4}, {:data=>"jo", :depth=>2, :parent=>4, :original_position=>6}, {:data=>"kate", :depth=>2, :parent=>4, :original_position=>5}, {:data=>"tom", :depth=>1, :parent=>2, :original_position=>3}]
+    asserts(:to_s).equals "bill\njoe\njon\n  jane\n  jill\nmatt\nsarah\nsteven\n  craig\n    jo\n    kate\n  tom"
   end
 end
