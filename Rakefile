@@ -24,4 +24,22 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
+Rake::TestTask.new(:test_parser) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/test_parser.rb'
+  test.verbose = true
+end
+
+Rake::TestTask.new(:test_indentation) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/test_indentation.rb'
+  test.verbose = true
+end
+
+Rake::TestTask.new(:test_sorter) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/test_sorter.rb'
+  test.verbose = true
+end
+
 task :default => :test
