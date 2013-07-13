@@ -93,6 +93,7 @@ context "#Sorted::Parser" do
     asserts ("that line nine has no siblings") { topic.siblings_of(9).empty? }
     asserts ("that line nine has no children") { topic.children_of(9).empty? }
     asserts ("that line nine has four parents") { topic.parents_of(9).size == 4 }
+    asserts ("that formated block is correct") { topic.to_a == [{:data=>"line zero", :depth=>0, :parent=>nil, :original_position=>0}, {:data=>"line one", :depth=>1, :parent=>0, :original_position=>1}, {:data=>"line two", :depth=>2, :parent=>1, :original_position=>2}, {:data=>"line three", :depth=>3, :parent=>2, :original_position=>3}, {:data=>"line four", :depth=>4, :parent=>3, :original_position=>4}, {:data=>"line five", :depth=>0, :parent=>nil, :original_position=>5}, {:data=>"line six", :depth=>1, :parent=>5, :original_position=>6}, {:data=>"line seven", :depth=>2, :parent=>6, :original_position=>7}, {:data=>"line eight", :depth=>3, :parent=>7, :original_position=>8}, {:data=>"line nine", :depth=>4, :parent=>8, :original_position=>9}] }
   end
 
 end

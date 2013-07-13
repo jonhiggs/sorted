@@ -21,6 +21,10 @@ module Sorted
           :depth => depth(line)
         })
         @elements.last[:parent] = parent_of_last
+
+        @elements.each_index do |index|
+          @elements[index][:original_position] = index
+        end
       end
     end
 
