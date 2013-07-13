@@ -5,7 +5,7 @@ module Sorted
     end
 
     def to_s
-      @elements.to_a.map{|e| (indentation * e[:depth]) + e[:data]}.join("\n") + "\n"
+      @elements.to_a.map{|e| (@indentation.to_s * e[:depth]) + e[:data]}.join("\n") + "\n"
     end
 
     def size
@@ -14,12 +14,12 @@ module Sorted
   end
 
   class Parser
+    require 'indentation'
     include Formatter
     def initialize input, config={}
       @input = []
       @elements = []
       @config = config
-      @config[:indentation] = indentation unless @config.has_key?(:indentation)
       push(input)
     end
 
@@ -32,10 +32,7 @@ module Sorted
         })
         @elements.last[:parent] = parent_of_last
       end
-    end
-
-    def indentation
-      "#{indentation_value}" * indentation_count
+      @indentation = Sorted::Indentation.new(@input)
     end
 
     def children_of id
@@ -104,13 +101,13 @@ module Sorted
     private
 
     def depth line
-      return 0 if indentation.empty?
-      leading_whitespace = line.match(/^#{indentation}*/).to_s
-      leading_whitespace.scan(/#{indentation}/).size
+      return 0 if @indentation.to_s.empty?
+      leading_whitespace = line.match(/^#{@indentation.to_s}*/).to_s
+      leading_whitespace.scan(/#{@indentation.to_s}/).size
     end
 
     def clean line
-      line.gsub(/^(#{indentation})*/, "")
+      line.gsub(/^(#{@indentation.to_s})*/, "")
     end
 
     def parent_of_last
@@ -124,26 +121,6 @@ module Sorted
         end
       end
       @elements.index(@answer)
-    end
-
-    def indentations
-      whitespaces = []
-      @input.each do |line|
-        v = line.match(/^\s*/).to_s
-        whitespaces.push(v)
-      end
-      whitespaces.sort.uniq
-    end
-
-    def indentation_count
-      return 0 if indentations.empty?
-      return indentations.first.size if indentations.first.size == indentations.last.size
-      indentations[-1].size - indentations[-2].size
-    end
-
-    def indentation_value
-      return "" if indentations.empty?
-      indentations.last.empty? ? "" : indentations.last.match(/^./).to_s
     end
 
   end
