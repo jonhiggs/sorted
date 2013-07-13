@@ -1,8 +1,6 @@
 module Sorted
   module Formatter
     def to_s
-      puts "my to_s"
-      puts @elements.to_a.map{|e| (indentation * e[:depth]) + e[:data]}.join("\n").inspect
       @elements.to_a.map{|e| (indentation * e[:depth]) + e[:data]}.join("\n") + "\n"
     end
 
