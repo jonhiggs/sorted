@@ -1,35 +1,16 @@
-module Sorted
-  class Sorter
-    def initialize input
+class Sorter
+  class Dictionary
+    include Sorted::Formatter
+
+    def initialize input, config={}
       @input = input
-      @input = ::Sorted::Parser.new(input).to_a if input.is_a?(String)
+      @elements = Sorted::Parser.new(input)
+      sort
+      puts "elements are #{@elements.to_a.inspect}"
     end
 
-    def size
-      @input.size
-    end
-
-    def to_a
-      @input
-    end
-
-    def dictionary
-      @input
-    end
-
-    def numeric
-      @input
-    end
-
-    def json
-      @input
-    end
-
-    def yaml
-      @input
-    end
-
-    def auto
+    def sort
+      @elements.to_a.sort_by{|e| e[:data] }
     end
   end
 end
