@@ -3,9 +3,7 @@ require 'test_helper'
 
 context "#Sorted::Indentation" do
   context "not nested" do
-    setup do
-      obj = Sorted::Indentation.new("y\n")
-    end
+    setup { Sorted::Indentation.new(EXAMPLES[:json][:simple]) }
 
     asserts("correct count") { topic.count == 0 }
     asserts("correct value") { topic.value.empty? }

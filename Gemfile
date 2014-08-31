@@ -1,7 +1,8 @@
 source "https://rubygems.org"
-ruby "1.9.3"
+ruby "2.1.2"
 
 gem "rspec"
 gem "jeweler"
 gem "riot"
 gem "autotest"
+gem "byebug"
