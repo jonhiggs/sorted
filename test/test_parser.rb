@@ -1,4 +1,3 @@
-require 'parser'
 require 'test_helper'
 
 context "#Sorted::Parser" do

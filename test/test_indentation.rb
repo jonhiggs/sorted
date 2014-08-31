@@ -1,4 +1,3 @@
-require 'indentation'
 require 'test_helper'
 
 context "#Sorted::Indentation" do

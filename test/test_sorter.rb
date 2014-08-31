@@ -1,5 +1,3 @@
-require 'parser'
-require 'sorter'
 require 'test_helper'
 
 context "#Sorted::Sorter::Dictionary" do
